@@ -6,7 +6,7 @@ namespace calculator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter an expression (ex. 2 + 3): ");
+            Console.WriteLine("Enter an expression (ex. 2 + 3, 4 gcd 6): ");
             string input = Console.ReadLine();
 
             try
@@ -26,7 +26,7 @@ namespace calculator
         }
     }
 
-    // Parser class to parse the input
+    // Parser class
     public class Parser
     {
         public (double, string, double) Parse(string input)
@@ -34,9 +34,7 @@ namespace calculator
             string[] parts = input.Split(' ');
 
             if (parts.Length != 3)
-            {
                 throw new FormatException("Input must be in the format: number operator number");
-            }
 
             double num1 = Convert.ToDouble(parts[0]);
             string op = parts[1];
@@ -46,14 +44,63 @@ namespace calculator
         }
     }
 
-    // Calculator class to perform operations
+    // Calculator class
     public class Calculator
     {
-        // ---------- TODO ----------
-        
-        // --------------------
+        public double Calculate(double num1, string op, double num2)
+        {
+            switch (op)
+            {
+                case "+":
+                    return num1 + num2;
+
+                case "-":
+                    return num1 - num2;
+
+                case "*":
+                    return num1 * num2;
+
+                case "/":
+                    if (num2 == 0)
+                        throw new DivideByZeroException("Division by zero is not allowed");
+                    return num1 / num2;
+
+                case "**":
+                    return Math.Pow((int)num1, (int)num2);
+
+                case "%":
+                    return (int)num1 % (int)num2;
+
+                case "gcd":
+                    return GCD((int)num1, (int)num2);
+
+                case "lcm":
+                    return LCM((int)num1, (int)num2);
+
+                default:
+                    throw new InvalidOperationException("Invalid operator");
+            }
+        }
+
+        private int GCD(int a, int b)
+        {
+            while (b != 0)
+            {
+                int temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return Math.Abs(a);
+        }
+
+        private int LCM(int a, int b)
+        {
+            if (a == 0 || b == 0) return 0;
+            return Math.Abs(a * b) / GCD(a, b);
+        }
     }
 }
+
 
 /* example output
 
